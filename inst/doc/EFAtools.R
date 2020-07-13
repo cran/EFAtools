@@ -6,6 +6,11 @@ knitr::opts_chunk$set(
   fig.align = "center"
 )
 
+if (!requireNamespace("microbenchmark", quietly = TRUE)) {
+      stop("Package \"microbenchmark\" needed for this vignette to work. Please install it.",
+      call. = FALSE)
+}
+
 
 ## -----------------------------------------------------------------------------
 library(EFAtools)
