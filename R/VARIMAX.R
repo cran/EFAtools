@@ -1,13 +1,14 @@
 ## Varimax rotation
 .VARIMAX <- function (x, type = c("EFAtools", "psych", "SPSS", "none"),
-                     kaiser = TRUE, precision = NULL, order_type = NULL) {
+                     normalize = TRUE, precision = 1e-5, order_type = NULL,
+                     varimax_type = NULL) {
 
   if (type == "none") {
     # if type is none, throw an error if not
     # all the other necessary arguments are specified.
 
-    if (is.null(precision) || is.null(order_type)) {
-      stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' One of "precision", or "order_type" was NULL and no valid "type" was specified. Either use one of "EFAtools", "psych", or "SPSS" for type, or specify all other arguments\n'))
+    if (is.null(order_type) || is.null(varimax_type)) {
+      stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' "order_type" or "varimax_type" was NULL and no valid "type" was specified. Either use one of "EFAtools", "psych", or "SPSS" for type, or specify all other arguments\n'))
     }
 
     } else if (type == "EFAtools") {
@@ -15,21 +16,21 @@
       # if not specified, set PAF properties. If specified, throw warning that
       # results may not exactly match the specified type
 
-      if (isFALSE(kaiser)) {
+      if (isFALSE(normalize)) {
 
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type\n"))
-      }
-
-      if (is.null(precision)) {
-        precision <- 1e-5
-      } else {
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type\n"))
       }
 
       if (is.null(order_type)) {
         order_type <- "eigen"
       } else {
         warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
+      }
+
+      if (is.null(varimax_type)) {
+        varimax_type <- "svd"
+      } else {
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
       }
 
 
@@ -38,15 +39,9 @@
       # if not specified, set PAF properties. If specified, throw warning that
       # results may not exactly match the specified type
 
-      if (isFALSE(kaiser)) {
+      if (isFALSE(normalize)) {
 
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type\n"))
-      }
-
-      if (is.null(precision)) {
-        precision <- 1e-5
-      } else {
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type\n"))
       }
 
       if (is.null(order_type)) {
@@ -55,26 +50,32 @@
         warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
       }
 
+      if (is.null(varimax_type)) {
+        varimax_type <- "svd"
+      } else {
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
+      }
+
     } else if (type == "SPSS") {
 
       # if not specified, set PAF properties. If specified, throw warning that
       # results may not exactly match the specified type
 
-      if (isFALSE(kaiser)) {
+      if (isFALSE(normalize)) {
 
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type\n"))
-      }
-
-      if (is.null(precision)) {
-        precision <- 1e-10
-      } else {
-        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type\n"))
       }
 
       if (is.null(order_type)) {
         order_type <- "ss_factors"
       } else {
         warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
+      }
+
+      if (is.null(varimax_type)) {
+        varimax_type <- "kaiser"
+      } else {
+        warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
       }
 
     }
@@ -84,8 +85,8 @@
     dim_names <- dimnames(L)
 
     # prepare settings
-    settings <- list(kaiser = kaiser, precision = precision,
-                     order_type = order_type)
+    settings <- list(normalize = normalize, precision = precision,
+                     order_type = order_type, varimax_type = varimax_type)
 
   if (ncol(L) < 2) {
 
@@ -100,7 +101,12 @@
   }
 
   # perform the varimax rotation
-  AV <- stats::varimax(L, normalize = kaiser, eps = precision)
+  if (varimax_type == "svd") {
+    AV <- stats::varimax(L, normalize = normalize, eps = precision)
+  } else if (varimax_type == "kaiser") {
+    AV <- .VARIMAX_SPSS(L, normalize = normalize, precision = precision)
+  }
+
 
   # reflect factors with negative sums
   signs <- sign(colSums(AV$loadings))
@@ -117,11 +123,7 @@
 
     AV$rotmat <- AV$rotmat[ss_order, ss_order]
 
-    if (!is.null(dim_names[[2]])) {
-      dim_names[[2]] <- dim_names[[2]][ss_order]
-    } else {
-      dim_names[[2]] <- paste0("F", 1:ncol(AV$loadings))[ss_order]
-    }
+    dim_names[[2]] <- dim_names[[2]][ss_order]
 
   } else if (order_type == "eigen") {
 
@@ -131,11 +133,7 @@
     AV$loadings <- AV$loadings[, eig_order]
     AV$rotmat <- AV$rotmat[eig_order, eig_order]
 
-    if (!is.null(dim_names[[2]])) {
-      dim_names[[2]] <- dim_names[[2]][eig_order]
-    } else {
-      dim_names[[2]] <- paste0("F", 1:ncol(AV$loadings))[eig_order]
-    }
+    dim_names[[2]] <- dim_names[[2]][eig_order]
 
   }
 
@@ -154,4 +152,73 @@
                  vars_accounted_rot = vars_accounted_rot,
                  settings = settings)
   output
+}
+
+
+# SPSS varimax implementation as described in the SPSS manual: ftp://public.dhe.ibm.com/software/analytics/spss/documentation/statistics/23.0/en/client/Manuals/IBM_SPSS_Statistics_Algorithms.pdf
+
+.VARIMAX_SPSS <- function(x, normalize = TRUE, precision = 1e-5) {
+
+  # get dimensions
+  n_cols <- ncol(x)
+  n_rows <- nrow(x)
+
+  if (isTRUE(normalize)) {
+    h2 <- diag(x %*% t(x))
+    x <- diag(1/sqrt(h2)) %*% x
+  }
+
+
+  # initialize rotation matrix as identity matrix
+  rotmat <- diag(1, n_cols)
+
+  SV_now <- .SV(x)
+
+
+  for (it in 1:1000) {
+
+    for (col_j in 1:(n_cols - 1)) {
+      for (col_k in (col_j + 1):n_cols) {
+
+        u_p <- x[,col_j] ** 2 - x[,col_k] ** 2
+        v_p <- 2 * x[,col_j] * x[,col_k]
+
+        A <- sum(u_p)
+        B <- sum(v_p)
+        C <- sum(u_p ** 2 - v_p ** 2)
+        D <- sum(2 * u_p * v_p)
+
+        X <- D - 2 * A * B / n_rows
+        Y <- C - (A ** 2 - B ** 2) / n_rows
+
+        P <- 1/4 * atan2(X, Y)
+
+        if (abs(sin(P)) > 1e-15) {
+          sub_rot <- matrix(c(cos(P), -sin(P),
+                              sin(P), cos(P)),
+                            ncol = 2, byrow = TRUE)
+
+          x[, c(col_j, col_k)] <- x[, c(col_j, col_k)] %*% sub_rot
+          rotmat[, c(col_j, col_k)] <- rotmat[, c(col_j, col_k)] %*% sub_rot
+        }
+
+      }
+    }
+
+    SV_old <- SV_now
+    SV_now <- .SV(x)
+
+    if (abs(SV_now - SV_old) <= precision) {
+      break
+    }
+
+  }
+
+  if (isTRUE(normalize)) {
+    x <- diag(sqrt(h2)) %*% x
+  }
+
+  # Create output list
+  list(rotmat = rotmat, loadings = x, iter = it)
+
 }

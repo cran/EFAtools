@@ -21,7 +21,7 @@
 #'   the CAF can be used as goodness of fit index. For details on the CAF, see
 #'   Lorenzo-Seva, Timmerman, and Kiers (2011).
 #' @param eigen_type character. On what the eigenvalues should be found in the
-#'  parallel analysis.. Can be one of \code{"SMC"}, \code{"PCA"}, or \code{"EFA"}.
+#'  parallel analysis. Can be one of \code{"SMC"}, \code{"PCA"}, or \code{"EFA"}.
 #'   If using  \code{"SMC"} (default), the diagonal of the correlation matrices is
 #'    replaced by the squared multiple correlations (SMCs) of the indicators. If
 #'     using  \code{"PCA"}, the diagonal values of the correlation
@@ -131,13 +131,6 @@ HULL <- function(x, N = NA, n_fac_theor = NA,
                  n_factors = 1, ...) {
   # Perform hull method following Lorenzo-Seva, Timmerman, and Kiers (2011)
 
-  # # for testing
-  # x <- IDS2_R
-  # N <- 2000
-  # n_fac_theor <- 7
-  # method <- "ML"
-  # gof <- c("CFI", "RMSEA")
-
   if(!inherits(x, c("matrix", "data.frame"))){
 
     stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(" 'x' is neither a matrix nor a dataframe. Either provide a correlation matrix or a dataframe or matrix with raw data.\n"))
@@ -230,20 +223,20 @@ HULL <- function(x, N = NA, n_fac_theor = NA,
 
     J <- max(c(n_fac_PA, n_fac_theor), na.rm = TRUE) + 1
 
-    if (J > .det_max_factors(ncol(R))) {
-      J <- .det_max_factors(ncol(R))
-      warning(crayon::yellow$bold("!"), crayon::yellow(' Setting maximum number of factors to',
-                                                       J, 'to ensure overidentified models.\n'))
-    }
+  }
 
-    if (J < 3) {
-      warning(crayon::yellow$bold("!"),
-              crayon::yellow(" Suggested maximum number of factors was", J,
-                             "but must be at least 3 for hull method to work.",
-                             "Setting it to 3.\n"))
-        J <- 3
+  if (J > .det_max_factors(ncol(R))) {
+    J <- .det_max_factors(ncol(R))
+    warning(crayon::yellow$bold("!"), crayon::yellow(' Setting maximum number of factors to',
+                                                     J, 'to ensure overidentified models.\n'))
+  }
 
-    }
+  if (J < 3) {
+    warning(crayon::yellow$bold("!"),
+            crayon::yellow(" Suggested maximum number of factors was", J,
+                           "but must be at least 3 for hull method to work.",
+                           "Setting it to 3.\n"))
+    J <- 3
 
   }
 
@@ -286,13 +279,13 @@ HULL <- function(x, N = NA, n_fac_theor = NA,
   }
 
   # Calculate loadings with EFA function
-  loadings <- suppressWarnings(future.apply::future_lapply(1:J, EFA,
+  loadings <- suppressWarnings(future.apply::future_lapply(seq_len(J), EFA,
                                                            x = R,
                                                            method = method,
                                                            N = N, ...))
 
   # then for 1 to J factors
-  for (i in 1:J) {
+  for (i in seq_len(J)) {
     if (method == "PAF") {
       # compute goodness of fit "f" as CAF (common part accounted for; Eq 3)
       # compute CAF
@@ -384,7 +377,10 @@ HULL <- function(x, N = NA, n_fac_theor = NA,
   s_complete <- s
   d_s <- diff(s[, 2])
   while (any(d_s < 0)) {
-    s <- s[c(1, d_s) > 0,]
+    s <- s[c(1, d_s) > 0, , drop = FALSE]
+    if(nrow(s) == 1){
+      break
+    }
     d_s <- diff(s[, 2])
   }
 

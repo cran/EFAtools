@@ -26,7 +26,7 @@ if (!requireNamespace("microbenchmark", quietly = TRUE)) {
 
 This vignette provides an overview for the functionalities of the EFAtools package. The general aim of the package is to provide flexible implementations of different algorithms for an exploratory factor analyses (EFA) procedure, including factor retention methods, factor extraction and rotation methods, as well as the computation of a Schmid-Leiman solution and McDonald's omega coefficients.
 
-The package was first designed to enable a comparison of EFA (specifically, principal axis factoring with subsequent promax rotation) performed in R using the [**psych**](https://CRAN.R-project.org/package=psych) package and EFA performed in SPSS. That is why some functions allow the specification of a type, including`"psych"` and `"SPSS"`, such that the respective procedure will be executed to match the output of these implementations (which do not always lead to the same results). This vignette will go through a complete example, that is, we will first show how to determine the number of factors to retain, then perform different factor extraction methods, run a Schmid-Leiman transformation and compute omegas.
+The package was first designed to enable a comparison of EFA (specifically, principal axis factoring with subsequent promax rotation) performed in R using the [**psych**](https://CRAN.R-project.org/package=psych) package and EFA performed in SPSS. That is why some functions allow the specification of a type, including `"psych"` and `"SPSS"`, such that the respective procedure will be executed to match the output of these implementations (which do not always lead to the same results; see separate vignette [**Replicate_SPSS_psych**](Replicate_SPSS_psych.html "Replicate SPSS and R psych results with EFAtools") for a demonstration of the replication of original results). This vignette will go through a complete example, that is, we will first show how to determine the number of factors to retain, then perform different factor extraction methods, run a Schmid-Leiman transformation and compute omegas.
 
 The package can be installed from CRAN using `install.packages("EFAtools")`, or from GitHub using `devtools::install_github("mdsteiner/EFAtools")`, and then loaded using:
 
@@ -88,7 +88,7 @@ Other factor retention methods can be used accordingly. For example, to use the 
 print(EKC(DOSPERT_sub), plot = FALSE)
 ```
 
-The following factor retention methods are currently implemented: comparison data (`CD()`), empirical Kaiser criterion (`EKC()`), the hull method (`HULL()`), the Kaiser-Guttman criterion (`KGC()`), parallel analysis (`PARALLEL()`), and sequential model tests (`SMT()`). Many of these functions have multiple versions of the respective factor retention method implemented, for example, the parallel analysis can be done based on eigenvalues found using unity (principal components) or SMCs, or on an EFA procedure. Another example is the hull method, which can be used with different fitting methods (principal axis factoring [PAF], maximum likelihood [ML], or unweighted least squares [ULS]), and different goodness of fit indices. Please see the respective function documentations for details.
+The following factor retention methods are currently implemented: comparison data (`CD()`), empirical Kaiser criterion (`EKC()`), the hull method (`HULL()`), the Kaiser-Guttman criterion (`KGC()`), parallel analysis (`PARALLEL()`), scree test (`SCREE()`), and sequential model tests (`SMT()`). Many of these functions have multiple versions of the respective factor retention method implemented, for example, the parallel analysis can be done based on eigenvalues found using unity (principal components) or SMCs, or on an EFA procedure. Another example is the hull method, which can be used with different fitting methods (principal axis factoring [PAF], maximum likelihood [ML], or unweighted least squares [ULS]), and different goodness of fit indices. Please see the respective function documentations for details.
 
 ### Run Multiple Factor Retention Methods With `N_FACTORS()`
 
@@ -98,7 +98,7 @@ For example, to test the suitability of the data for factor analysis and to dete
 
 ```{r}
 N_FACTORS(DOSPERT_sub, criteria = c("PARALLEL", "EKC", "SMT"),
-          eigen_type_KGC_PA = c("SMC", "PCA"))
+          eigen_type_other = c("SMC", "PCA"))
 ```
 
 
@@ -110,11 +110,11 @@ N_FACTORS(DOSPERT_sub, method = "ULS")
 
 Now, this is not the scenario one is happy about, but it still does happen: There is no obvious convergence between the methods and thus the choice of the number of factors to retain becomes rather difficult (and to some extend arbitrary). We will proceed with 6 factors, as it is what is typically used with DOSPERT data, but this does not mean that other number of factors are not just as plausible.
 
-Note that all factor retention methods, except comparison data (CD), can also be used with correlation matrices. We use `method = "ULS"` and `eigen_type_KGC_PA = c("SMC", "PCA")` to skip the slower criteria. In this case, the sample size has to be specified:
+Note that all factor retention methods, except comparison data (CD), can also be used with correlation matrices. We use `method = "ULS"` and `eigen_type_other = c("SMC", "PCA")` to skip the slower criteria. In this case, the sample size has to be specified:
 
 ```{r}
 N_FACTORS(test_models$baseline$cormat, N = 500,
-          method = "ULS", eigen_type_KGC_PA = c("SMC", "PCA"))
+          method = "ULS", eigen_type_other = c("SMC", "PCA"))
 ```
 
 ## Exploratory Factor Analysis: Factor Extraction
@@ -174,6 +174,14 @@ COMPARE(
   x_labels = c("PAF and promax", "ULS and oblimin")
 )
 ```
+
+Finally, if you are interested in factor scores from the EFA solution, these can be obtained with `FACTOR_SCORES()`, a wrapper for `psych::factor.scores()` to be used directly with an output from `EFA()`:
+
+```{r}
+EFA_mod <- EFA(DOSPERT_sub, n_factors = 6, rotation = "promax")
+fac_scores <- FACTOR_SCORES(DOSPERT_sub, f = EFA_mod)
+```
+
 
 ### Performance
 

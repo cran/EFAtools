@@ -1,35 +1,29 @@
 ## Promax rotation
 .PROMAX <- function (x, type = c("EFAtools", "psych", "SPSS", "none"),
-                    kaiser = TRUE, P_type = NULL, precision = NULL,
-                    order_type = NULL, k = NULL) {
+                    normalize = TRUE, P_type = NULL, precision = 1e-5,
+                    order_type = NULL,  varimax_type = NULL, k = NULL) {
 
   if (type == "none") {
     # if type is none, throw an error if not
     # all the other necessary arguments are specified.
 
-    if (is.null(P_type) || is.null(precision) || is.null(order_type) || is.null(k)) {
-      stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' One of "P_type", "precision", "order_type", or "k" was NULL and no valid "type" was specified. Either use one of "EFAtools", "psych", or "SPSS" for type, or specify all other arguments\n'))
+    if (is.null(P_type) || is.null(order_type) || is.null(varimax_type) || is.null(k)) {
+      stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' One of "P_type", "order_type", "varimax_type", or "k" was NULL and no valid "type" was specified. Either use one of "EFAtools", "psych", or "SPSS" for type, or specify all other arguments\n'))
     }
   } else if (type == "EFAtools") {
 
     # if not specified, set PAF properties. If specified, throw warning that
     # results may not exactly match the specified type
 
-    if (isFALSE(kaiser)) {
+    if (isFALSE(normalize)) {
 
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type\n"))
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type\n"))
     }
 
     if (is.null(P_type)) {
-      P_type <- "unnorm"
+      P_type <- "norm"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and P_type is specified. P_type is used with value '", P_type, "'. Results may differ from the specified type\n"))
-    }
-
-    if (is.null(precision)) {
-      precision <- 1e-5
-    } else {
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
     }
 
     if (is.null(order_type)) {
@@ -38,8 +32,14 @@
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
     }
 
+    if (is.null(varimax_type)) {
+      varimax_type <- "svd"
+    } else {
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
+    }
+
     if (is.null(k)) {
-      k <- 3
+      k <- 4
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and k is specified. k is used with value '", k, "'. Results may differ from the specified type\n"))
     }
@@ -50,9 +50,9 @@
     # if not specified, set PAF properties. If specified, throw warning that
     # results may not exactly match the specified type
 
-    if (isFALSE(kaiser)) {
+    if (isFALSE(normalize)) {
 
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type.\n"))
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type.\n"))
     }
 
     if (is.null(P_type)) {
@@ -61,16 +61,16 @@
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and P_type is specified. P_type is used with value '", P_type, "'. Results may differ from the specified type\n"))
     }
 
-    if (is.null(precision)) {
-      precision <- 1e-5
-    } else {
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
-    }
-
     if (is.null(order_type)) {
       order_type <- "eigen"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
+    }
+
+    if (is.null(varimax_type)) {
+      varimax_type <- "svd"
+    } else {
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
     }
 
     if (is.null(k)) {
@@ -85,9 +85,9 @@
     # if not specified, set PAF properties. If specified, throw warning that
     # results may not exactly match the specified type
 
-    if (isFALSE(kaiser)) {
+    if (isFALSE(normalize)) {
 
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and kaiser is specified. kaiser is used with value '", kaiser, "'. Results may differ from the specified type.\n"))
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and normalize is specified. normalize is used with value '", normalize, "'. Results may differ from the specified type.\n"))
     }
 
     if (is.null(P_type)) {
@@ -96,16 +96,16 @@
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and P_type is specified. P_type is used with value '", P_type, "'. Results may differ from the specified type\n"))
     }
 
-    if (is.null(precision)) {
-      precision <- 1e-10
-    } else {
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and precision is specified. precision is used with value '", precision, "'. Results may differ from the specified type\n"))
-    }
-
     if (is.null(order_type)) {
       order_type <- "ss_factors"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and order_type is specified. order_type is used with value '", order_type, "'. Results may differ from the specified type\n"))
+    }
+
+    if (is.null(varimax_type)) {
+      varimax_type <- "kaiser"
+    } else {
+      warning(crayon::yellow$bold("!"), crayon::yellow(" Type and varimax_type is specified. varimax_type is used with value '", varimax_type, "'. Results may differ from the specified type\n"))
     }
 
     if (is.null(k)) {
@@ -121,8 +121,9 @@
     dim_names <- dimnames(L)
 
   # store settings used
-    settings <- list(kaiser = kaiser, P_type = P_type,
-                     precision = precision, order_type = order_type, k = k)
+    settings <- list(normalize = normalize, P_type = P_type,
+                     precision = precision, order_type = order_type,
+                     varimax_type = varimax_type, k = k)
 
   if (ncol(L) < 2) {
     # prepare and return output list
@@ -138,7 +139,12 @@
   }
 
   # perform the varimax rotation
-  AV <- stats::varimax(L, normalize = kaiser, eps = precision)
+    if (varimax_type == "svd") {
+      AV <- stats::varimax(L, normalize = normalize, eps = precision)
+    } else if (varimax_type == "kaiser") {
+      AV <- .VARIMAX_SPSS(L, normalize = normalize, precision = precision)
+    }
+
 
   if (order_type == "ss_factors") {
 
@@ -155,11 +161,7 @@
 
     AV$rotmat <- AV$rotmat[ss_order, ss_order]
 
-    if (!is.null(dim_names[[2]])) {
-      dim_names[[2]] <- dim_names[[2]][ss_order]
-    } else {
-      dim_names[[2]] <- paste0("F", 1:ncol(AV$loadings))[ss_order]
-    }
+    dim_names[[2]] <- dim_names[[2]][ss_order]
 
   }
 
@@ -207,11 +209,7 @@
     Phi <- diag(signs) %*% Phi %*% diag(signs)
     Phi <- Phi[eig_order, eig_order]
 
-    if (!is.null(dim_names[[2]])) {
-      dim_names[[2]] <- dim_names[[2]][eig_order]
-    } else {
-      dim_names[[2]] <- paste0("F", 1:ncol(AV$loadings))[eig_order]
-    }
+    dim_names[[2]] <- dim_names[[2]][eig_order]
 
   }
 

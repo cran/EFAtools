@@ -23,7 +23,7 @@
     # results may not exactly match the specified type
 
     if (is.null(init_comm)) {
-      init_comm <- "mac"
+      init_comm <- "smc"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and init_comm is specified. init_comm is used with value '", init_comm, "'. Results may differ from the specified type\n"))
     }
@@ -35,7 +35,7 @@
     }
 
     if (is.null(criterion_type)) {
-      criterion_type <- "sums"
+      criterion_type <- "sum"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and criterion_type is specified. criterion_type is used with value '", criterion_type, "'. Results may differ from the specified type\n"))
     }
@@ -71,7 +71,7 @@
     }
 
     if (is.null(criterion_type)) {
-      criterion_type <- "sums"
+      criterion_type <- "sum"
     } else {
       warning(crayon::yellow$bold("!"), crayon::yellow(" Type and criterion_type is specified. criterion_type is used with value '", criterion_type, "'. Results may differ from the specified type\n"))
     }
@@ -209,13 +209,13 @@
     # name the loading matrix so the variables can be identified
     rownames(L) <- colnames(orig_R)
   } else {
-    varnames <- paste0("V", 1:ncol(orig_R))
+    varnames <- paste0("V", seq_len(ncol(orig_R)))
     colnames(orig_R) <- varnames
     rownames(orig_R) <- varnames
     rownames(L) <- varnames
   }
 
-  colnames(L) <- paste0("F", 1:m)
+  colnames(L) <- paste0("F", seq_len(m))
 
   vars_accounted <- .compute_vars(L_unrot = L, L_rot = L)
 

@@ -15,7 +15,7 @@
 #' Only has to be specified if \code{x} is left as \code{NULL} as otherwise the
 #' dimensions are taken from \code{x}.
 #' @param n_datasets numeric. The number of datasets to simulate. Default is 1000.
-#' @param percent numeric. A vector of percentiles to take the simulated eigenvalues from.
+#' @param percent numeric. The percentile to take from the simulated eigenvalues.
 #'  Default is 95.
 #' @param eigen_type character. On what the eigenvalues should be found. Can be
 #'  either "SMC", "PCA", or "EFA". If using "SMC", the diagonal of the correlation
@@ -157,18 +157,13 @@ PARALLEL <- function(x = NULL,
   n_fac_EFA <- NA
   x_dat <- FALSE
 
-  if (!is.null(x)) {
-
-    if (any(!apply(x, 2, inherits, "numeric"))) {
-      warning(crayon::yellow$bold("!"), crayon::yellow(" Data contained non-numeric columns. Eigenvalues of actual data were not computed.\n"))
-    } else {
+  if (!is.null(x)){
 
       if (!is.na(n_vars)) {
         warning(crayon::yellow$bold("!"), crayon::yellow(" n_vars was set and data entered. Taking n_vars from data\n"))
       }
       n_vars <- ncol(x)
       x_dat <- TRUE
-
 
       # Check if it is a correlation matrix
       if(.is_cormat(x)){
@@ -187,16 +182,6 @@ PARALLEL <- function(x = NULL,
         colnames(R) <- colnames(x)
         N <- nrow(x)
 
-      }
-
-      if (is.na(N)) {
-
-        stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' "N" was not set and could not be taken from data. Please specify N and try again.\n'))
-
-      }
-
-      if (is.na(n_vars)) {
-        stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' "n_vars" was not set and could not be taken from data. Please specify n_vars and try again.\n'))
       }
 
       # Check if correlation matrix is invertable, if it is not, stop with message
@@ -234,7 +219,15 @@ PARALLEL <- function(x = NULL,
         colnames(eigvals_real_EFA) <- "Real Eigenvalues"
       }
 
-    }
+  }
+
+  if (is.na(n_vars)) {
+    stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' "n_vars" was not set and could not be taken from data. Please specify n_vars and try again.\n'))
+  }
+
+  if (is.na(N)) {
+
+    stop(crayon::red$bold(cli::symbol$circle_cross), crayon::red(' "N" was not set and could not be taken from data. Please specify N and try again.\n'))
 
   }
 
@@ -385,18 +378,18 @@ PARALLEL <- function(x = NULL,
 
   eigvals <- matrix(nrow = n_datasets, ncol = n_vars)
 
-  for(i in 1:n_datasets){
+  for(i in seq_len(n_datasets)){
 
     x <- matrix(stats::rnorm(N * n_vars), nrow = N, ncol = n_vars)
     R <- stats::cor(x)
-    eigvals_i <- try(suppressWarnings(EFA(R, n_factors = n_factors, N = N,
-                                          ...)$final_eigen), silent = TRUE)
+    eigvals_i <- try(suppressWarnings(suppressMessages(EFA(R, n_factors = n_factors, N = N,
+                                          ...)$final_eigen)), silent = TRUE)
     it_i <- 1
     while (inherits(eigvals_i, "try-error") && it_i < 25) {
       x <- matrix(stats::rnorm(N * n_vars), nrow = N, ncol = n_vars)
       R <- stats::cor(x)
-      eigvals_i <- try(suppressWarnings(EFA(R, n_factors = n_factors, N = N,
-                                            ...)$final_eigen), silent = TRUE)
+      eigvals_i <- try(suppressWarnings(suppressMessages(EFA(R, n_factors = n_factors, N = N,
+                                            ...)$final_eigen)), silent = TRUE)
       it_i <- it_i + 1
     }
 
@@ -431,10 +424,8 @@ if (decision_rule == "crawford") {
 
 } else if (decision_rule == "percentile") {
 
-  for (perc_i in percent) {
-    pp <- paste(perc_i, "Percentile")
-    n_fac[pp] <- which(!(eigvals_real > results[, pp]))[1] - 1
-  }
+  pp <- paste(percent, "Percentile")
+  n_fac <- which(!(eigvals_real > results[, pp]))[1] - 1
 
 }
 
@@ -447,8 +438,8 @@ if (decision_rule == "crawford") {
   results <- matrix(NA, nrow = n_vars, ncol = length(percent) + 1)
   results[, 1] <- colMeans(eig_vals)
 
-  for (root in 1:n_vars) {
-    for (perc_i in 1:length(percent)) {
+  for (root in seq_len(n_vars)) {
+    for (perc_i in seq_along(percent)) {
       ind <- round((percent[perc_i] * n_datasets) / 100)
       results[root, 1 + perc_i] <- sort(eig_vals[, root])[ind]
     }

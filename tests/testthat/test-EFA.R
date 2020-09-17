@@ -23,8 +23,9 @@ efa_quart <- EFA(test_models$baseline$cormat, n_factors = 3, N = 500,
 efa_none <- EFA(test_models$baseline$cormat, n_factors = 3, N = 500,
                 type = "none", method = "PAF", rotation = "promax",
                 max_iter = 500, init_comm = "unity", criterion = 1e-4,
-                criterion_type = "sums", abs_eigen = FALSE, k = 3,
-                P_type = "unnorm", precision= 1e-5, order_type = "eigen")
+                criterion_type = "sum", abs_eigen = FALSE, k = 3,
+                P_type = "unnorm", precision= 1e-5, order_type = "eigen",
+                varimax_type = "svd")
 
 # create correlation matrices from population models
 cormat_zero <- population_models$loadings$baseline %*% population_models$phis_3$zero %*% t(population_models$loadings$baseline)
@@ -122,13 +123,13 @@ test_that("settings are returned correctly", {
   expect_named(efa_psych$settings, c("method", "rotation", "type", "n_factors",
                                      "N", "use", "cor_method", "max_iter",
                                      "init_comm", "criterion", "criterion_type",
-                                     "abs_eigen", "kaiser", "P_type", "precision",
-                                     "order_type", "k"))
+                                     "abs_eigen", "normalize", "P_type", "precision",
+                                     "order_type", "varimax_type", "k"))
   expect_named(efa_spss$settings, c("method", "rotation", "type", "n_factors",
                                     "N", "use", "cor_method", "max_iter",
                                     "init_comm", "criterion", "criterion_type",
-                                    "abs_eigen", "kaiser", "P_type", "precision",
-                                    "order_type", "k"))
+                                    "abs_eigen", "normalize", "P_type", "precision",
+                                    "order_type", "varimax_type", "k"))
   expect_named(efa_ml$settings, c("method", "rotation", "type", "n_factors",
                                     "N", "use", "cor_method", "start_method"))
   expect_named(efa_uls$settings, c("method", "rotation", "type", "n_factors",
@@ -136,18 +137,18 @@ test_that("settings are returned correctly", {
   expect_named(efa_equa$settings, c("method", "rotation", "type", "n_factors",
                                    "N", "use", "cor_method", "max_iter",
                                    "init_comm", "criterion", "criterion_type",
-                                   "abs_eigen", "kaiser", "precision",
+                                   "abs_eigen", "normalize", "precision",
                                    "order_type"))
   expect_named(efa_quart$settings, c("method", "rotation", "type", "n_factors",
                                    "N", "use", "cor_method", "max_iter",
                                    "init_comm", "criterion", "criterion_type",
-                                   "abs_eigen", "kaiser", "precision",
+                                   "abs_eigen", "normalize", "precision",
                                    "order_type", "k"))
   expect_named(efa_none$settings, c("method", "rotation", "type", "n_factors",
                                    "N", "use", "cor_method", "max_iter",
                                    "init_comm", "criterion", "criterion_type",
-                                   "abs_eigen", "kaiser", "P_type", "precision",
-                                   "order_type", "k"))
+                                   "abs_eigen", "normalize", "P_type", "precision",
+                                   "order_type", "varimax_type", "k"))
 
   expect_equal(efa_cor$settings$method, "PAF")
   expect_equal(efa_raw$settings$method, "PAF")
@@ -227,12 +228,12 @@ test_that("settings are returned correctly", {
   expect_equal(efa_quart$settings$max_iter, 300)
   expect_equal(efa_none$settings$max_iter, 500)
 
-  expect_equal(efa_cor$settings$init_comm, "mac")
-  expect_equal(efa_raw$settings$init_comm, "mac")
+  expect_equal(efa_cor$settings$init_comm, "smc")
+  expect_equal(efa_raw$settings$init_comm, "smc")
   expect_equal(efa_psych$settings$init_comm, "smc")
   expect_equal(efa_spss$settings$init_comm, "smc")
-  expect_equal(efa_equa$settings$init_comm, "mac")
-  expect_equal(efa_quart$settings$init_comm, "mac")
+  expect_equal(efa_equa$settings$init_comm, "smc")
+  expect_equal(efa_quart$settings$init_comm, "smc")
   expect_equal(efa_none$settings$init_comm, "unity")
 
   expect_equal(efa_cor$settings$criterion, 0.001)
@@ -243,13 +244,13 @@ test_that("settings are returned correctly", {
   expect_equal(efa_quart$settings$criterion,  0.001)
   expect_equal(efa_none$settings$criterion,  1e-4)
 
-  expect_equal(efa_cor$settings$criterion_type, "sums")
-  expect_equal(efa_raw$settings$criterion_type, "sums")
-  expect_equal(efa_psych$settings$criterion_type, "sums")
+  expect_equal(efa_cor$settings$criterion_type, "sum")
+  expect_equal(efa_raw$settings$criterion_type, "sum")
+  expect_equal(efa_psych$settings$criterion_type, "sum")
   expect_equal(efa_spss$settings$criterion_type, "max_individual")
-  expect_equal(efa_equa$settings$criterion_type, "sums")
-  expect_equal(efa_quart$settings$criterion_type, "sums")
-  expect_equal(efa_none$settings$criterion_type, "sums")
+  expect_equal(efa_equa$settings$criterion_type, "sum")
+  expect_equal(efa_quart$settings$criterion_type, "sum")
+  expect_equal(efa_none$settings$criterion_type, "sum")
 
   expect_equal(efa_cor$settings$abs_eigen, TRUE)
   expect_equal(efa_raw$settings$abs_eigen,  TRUE)
@@ -259,18 +260,18 @@ test_that("settings are returned correctly", {
   expect_equal(efa_quart$settings$abs_eigen,  TRUE)
   expect_equal(efa_none$settings$abs_eigen, FALSE)
 
-  expect_equal(efa_psych$settings$kaiser, TRUE)
-  expect_equal(efa_spss$settings$kaiser, TRUE)
-  expect_equal(efa_equa$settings$kaiser, TRUE)
-  expect_equal(efa_quart$settings$kaiser, TRUE)
-  expect_equal(efa_none$settings$kaiser, TRUE)
+  expect_equal(efa_psych$settings$normalize, TRUE)
+  expect_equal(efa_spss$settings$normalize, TRUE)
+  expect_equal(efa_equa$settings$normalize, TRUE)
+  expect_equal(efa_quart$settings$normalize, TRUE)
+  expect_equal(efa_none$settings$normalize, TRUE)
 
   expect_equal(efa_psych$settings$P_type, "unnorm")
   expect_equal(efa_spss$settings$P_type, "norm")
   expect_equal(efa_none$settings$P_type, "unnorm")
 
   expect_equal(efa_psych$settings$precision, 1e-05)
-  expect_equal(efa_spss$settings$precision, 1e-10)
+  expect_equal(efa_spss$settings$precision, 1e-05)
   expect_equal(efa_equa$settings$precision, 1e-05)
   expect_equal(efa_quart$settings$precision, 1e-05)
   expect_equal(efa_none$settings$precision, 1e-05)
@@ -281,12 +282,15 @@ test_that("settings are returned correctly", {
   expect_equal(efa_quart$settings$order_type, "eigen")
   expect_equal(efa_none$settings$order_type, "eigen")
 
+  expect_equal(efa_psych$settings$varimax_type, "svd")
+  expect_equal(efa_spss$settings$varimax_type, "kaiser")
+  expect_equal(efa_none$settings$varimax_type, "svd")
+
   expect_equal(efa_psych$settings$k, 4)
   expect_equal(efa_spss$settings$k, 4)
-  expect_equal(efa_equa$settings$k, TRUE)
   expect_equal(efa_none$settings$k, 3)
 
-  expect_equal(efa_ml$settings$start_method, "factanal")
+  expect_equal(efa_ml$settings$start_method, "psych")
 })
 
 test_that("factor analyses are performed correctly", {
@@ -317,6 +321,8 @@ z <- x + y
 dat_sing <- matrix(c(x, y, z), ncol = 3)
 cor_sing <- stats::cor(dat_sing)
 
+cor_nposdef <- matrix(c(1, 1, 0, 1, 1, 1, 0, 1, 1), ncol = 3)
+
 test_that("errors are thrown correctly", {
   expect_error(EFA(1:5), " 'x' is neither a matrix nor a dataframe. Either provide a correlation matrix or a dataframe or matrix with raw data.\n")
   expect_message(EFA(GRiPS_raw, n_factors = 1), " 'x' was not a correlation matrix. Correlations are found from entered raw data.\n")
@@ -327,10 +333,12 @@ test_that("errors are thrown correctly", {
   expect_warning(EFA(matrix(rnorm(30), ncol = 3), n_factors = 1), " The model is just identified (df = 0). We suggest to try again with a lower number of factors or a larger number of indicators.\n", fixed = TRUE)
   expect_warning(EFA(test_models$baseline$cormat, n_factors = 3, method = "ML"), " Argument 'N' was NA, not all fit indices could be computed. To get all fit indices, either provide N or raw data.\n")
   expect_warning(EFA(test_models$baseline$cormat, n_factors = 3, method = "ULS"), " Argument 'N' was NA, not all fit indices could be computed. To get all fit indices, either provide N or raw data.\n")
+  expect_warning(EFA(cor_nposdef, n_factors = 1, N = 10), "Matrix was not positive definite, smoothing was done")
 })
 
 rm(efa_cor, efa_raw, efa_psych, efa_spss, efa_ml, efa_uls, efa_equa, efa_quart,
    efa_none, cormat_zero, cormat_moderate, efa_paf_zero, efa_ml_zero, efa_uls_zero,
-   efa_paf_moderate, efa_ml_moderate, efa_uls_moderate, x, y, z, dat_sing, cor_sing)
+   efa_paf_moderate, efa_ml_moderate, efa_uls_moderate, x, y, z, dat_sing, cor_sing,
+   cor_nposdef)
 
 

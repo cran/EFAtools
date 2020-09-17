@@ -46,7 +46,7 @@
 #' @param criterion_type character. Type of convergence criterion used for
 #' PAF. "max_individual" selects the maximum change in any of the
 #' communalities from one iteration to the next and tests it against the
-#' specified criterion. This is also used by SPSS. "sums" takes the difference of
+#' specified criterion. This is also used by SPSS. "sum" takes the difference of
 #' the sum of all communalities in one iteration and the sum of all communalities
 #' in the next iteration and tests this against the criterion. This procedure is
 #' used by the \code{\link[psych:fa]{psych::fa}} function. Default is \code{NULL}.
@@ -65,7 +65,7 @@
 #' \code{NULL} (default), the value for promax depends on the specified type.
 #' For simplimax, \code{nrow(L)}, where L is the matrix of unrotated loadings,
 #' is used by default.
-#' @param kaiser logical. If \code{TRUE}, kaiser normalization is
+#' @param normalize logical. If \code{TRUE}, a kaiser normalization is
 #' performed before the specified rotation. Default is \code{TRUE}.
 #' @param P_type character. This specifies how the target
 #' matrix P is computed in promax rotation. If "unnorm" it will use the
@@ -73,19 +73,20 @@
 #' This is also used in the psych and stats packages. If "norm" it will use the
 #' normalized target matrix as used in SPSS. Default is \code{NULL}.
 #' @param precision numeric. The tolerance for stopping in the rotation
-#' procecdure. This is passed to the "eps" argument of the
-#' \code{\link[stats:varimax]{stats::varimax}} and the \code{GPArotation} functions.
-#' If left \code{NULL} (default), the precision is set according to the specified
-#' \code{type} for varimax and promax rotation or is set to 10^-5 for all other
-#' rotations.
+#' procedure. Defaul is 10^-5 for all rotation methods.
+#' @param varimax_type character. The type of the varimax rotation performed.
+#' If "svd", singular value decomposition is used, as \link[stats:varimax]{stats::varimax} does. If "kaiser", the varimax procedure performed in SPSS is used.
+#' This is the original procedure from Kaiser (1958), but with slight alterations
+#' in the varimax criterion (see Grieder & Steiner, 2020). Default is \code{NULL}.
 #' @param order_type character. How to order the factors. "eigen" will reorder
 #' the factors according to the largest to lowest eigenvalues of the matrix of
 #' rotated loadings. "ss_factors" will reorder the factors according to descending
 #' sum of squared factor loadings per factor. Default is \code{NULL}.
 #' @param start_method character. How to specify the starting values for the
-#' optimization procedure for ML. Default is "factanal" which takes the starting
-#' values specified in the \link[stats:factanal]{stats::factanal} function. "psych" takes the
-#' starting values specified in \link[psych:fa]{psych::fa}. Solutions are very similar.
+#' optimization procedure for ML. Default is "psych" which takes the
+#' starting values specified in \link[psych:fa]{psych::fa}. "factanal" takes the
+#' starting values specified in the \link[stats:factanal]{stats::factanal} function.
+#' Solutions are very similar.
 #' @param ... Additional arguments passed to rotation functions from the \code{GPArotation} package (e.g., \code{maxit} for maximum number of iterations).
 #'
 #' @details There are two main ways to use this function. The easiest way is to
@@ -104,11 +105,11 @@
 #' and \code{abs_eigen} depend on the \code{type} argument.
 #'
 #' \code{type = "EFAtools"} will use the following argument specification:
-#' \code{init_comm = "mac", criterion = .001, criterion_type = "sums",
+#' \code{init_comm = "smc", criterion = .001, criterion_type = "sum",
 #' abs_eigen = TRUE}.
 #'
 #' \code{type = "psych"} will use the following argument specification:
-#' \code{init_comm = "smc", criterion = .001, criterion_type = "sums",
+#' \code{init_comm = "smc", criterion = .001, criterion_type = "sum",
 #' abs_eigen = FALSE}.
 #'
 #' \code{type = "SPSS"} will use the following argument specification:
@@ -122,29 +123,29 @@
 #' other setting combinations tested in simulation studies in Grieder & Steiner
 #' (2020), which is why this type is used as a default here.
 #'
-#' For varimax, the values of \code{precision} and \code{order_type} depend on
+#' For varimax, the values of \code{varimax_type} and \code{order_type} depend on
 #' the \code{type} argument.
 #'
 #' \code{type = "EFAtools"} will use the following argument specification:
-#' \code{precision = 1e-5, order_type = "eigen"}.
+#' \code{varimax_type = "svd", order_type = "eigen"}.
 #'
 #' \code{type = "psych"} will use the following argument specification:
-#' \code{precision = 1e-5, order_type = "eigen"}.
+#' \code{varimax_type = "svd", order_type = "eigen"}.
 #'
 #' \code{type = "SPSS"} will use the following argument specification:
-#' \code{precision = 1e-10, order_type = "ss_factors"}.
+#' \code{varimax_type = "kaiser", order_type = "ss_factors"}.
 #'
-#' For promax, the values of \code{P_type}, \code{precision},
+#' For promax, the values of \code{P_type},
 #' \code{order_type}, and \code{k} depend on the \code{type} argument.
 #'
 #' \code{type = "EFAtools"} will use the following argument specification:
-#' \code{P_type = "unnorm", precision = 1e-5, order_type = "eigen", k = 3}.
+#' \code{P_type = "norm", order_type = "eigen", k = 4}.
 #'
 #' \code{type = "psych"} will use the following argument specification:
-#' \code{P_type = "unnorm", precision = 1e-5, order_type = "eigen", k = 4}.
+#' \code{P_type = "unnorm", order_type = "eigen", k = 4}.
 #'
 #' \code{type = "SPSS"} will use the following argument specification:
-#' \code{P_type = "norm", precision = 1e-10, order_type = "ss_factors", k = 4}.
+#' \code{P_type = "norm", order_type = "ss_factors", k = 4}.
 #'
 #' The \code{P_type} argument can take two values, "unnorm" and "norm". It controls
 #' which formula is used to compute the target matrix P in the promax rotation.
@@ -189,11 +190,11 @@
 #' \item{unrot_loadings}{Loading matrix containing the final unrotated loadings.}
 #' \item{vars_accounted}{Matrix of explained variances and sums of squared loadings. Based on the unrotated loadings.}
 #' \item{fit_indices}{For ML and ULS: Fit indices derived from the unrotated
-#' factor loadings: Chi Square, degrees of freedom (df), Comparative Fit Index
-#' (CFI), Root Mean Square Error of Approximation (RMSEA), including its 90\%
-#' confidence interval, and the common part accounted for (CAF) index as
-#' proposed by Lorenzo-Seva, Timmerman, & Kiers (2011). For PAF, only the CAF and
-#' dfs are returned.}
+#' factor loadings: Chi Square, including significance level, degrees of freedom
+#' (df), Comparative Fit Index (CFI), Root Mean Square Error of Approximation
+#' (RMSEA), including its 90\% confidence interval, and the common part accounted
+#' for (CAF) index as proposed by Lorenzo-Seva, Timmerman, & Kiers (2011).
+#' For PAF, only the CAF and dfs are returned.}
 #' \item{rot_loadings}{Loading matrix containing the final rotated loadings
 #' (pattern matrix).}
 #' \item{Phi}{The factor intercorrelations (only for oblique rotations).}
@@ -213,6 +214,8 @@
 #' @source Lorenzo-Seva, U., Timmerman, M. E., & Kiers, H. A. L. (2011). The
 #' Hull Method for Selecting the Number of Common Factors, Multivariate Behavioral
 #' Research, 46, 340-364, doi: 10.1080/00273171.2011.564527
+#' @source Kaiser, H. F. (1958). The varimax criterion for analytic rotation in
+#' factor analysis. Psychometrika, 23, 187–200. doi: 10.1007/BF02289233
 #'
 #' @export
 #'
@@ -244,14 +247,15 @@
 #' PAF_none <- EFA(test_models$baseline$cormat, n_factors = 3, N = 500,
 #'                 type = "none", method = "PAF", rotation = "none",
 #'                 max_iter = 500, init_comm = "mac", criterion = 1e-4,
-#'                 criterion_type = "sums", abs_eigen = FALSE)
+#'                 criterion_type = "sum", abs_eigen = FALSE)
 #'
 #' # Add a promax rotation
 #' PAF_pro <- EFA(test_models$baseline$cormat, n_factors = 3, N = 500,
 #'                type = "none", method = "PAF", rotation = "promax",
 #'                max_iter = 500, init_comm = "mac", criterion = 1e-4,
-#'                criterion_type = "sums", abs_eigen = FALSE, k = 3,
-#'                P_type = "unnorm", precision= 1e-5, order_type = "eigen")
+#'                criterion_type = "sum", abs_eigen = FALSE, k = 3,
+#'                P_type = "unnorm", precision= 1e-5, order_type = "eigen",
+#'                varimax_type = "svd")
 #'
 EFA <- function(x, n_factors, N = NA, method = c("PAF", "ML", "ULS"),
                 rotation = c("none", "varimax", "equamax", "quartimax", "geominT",
@@ -263,8 +267,9 @@ EFA <- function(x, n_factors, N = NA, method = c("PAF", "ML", "ULS"),
                 abs_eigen = NULL, use = c("pairwise.complete.obs", "all.obs",
                                           "complete.obs", "everything",
                                           "na.or.complete"),
-                k = NULL, kaiser = TRUE, P_type = NULL, precision = NULL,
-                order_type = NULL, start_method = c("factanal", "psych"),
+                varimax_type = NULL,
+                k = NULL, normalize = TRUE, P_type = NULL, precision = 1e-5,
+                order_type = NULL, start_method = c("psych", "factanal"),
                 cor_method = c("pearson", "spearman", "kendall"),
                 ...) {
 
@@ -287,13 +292,14 @@ EFA <- function(x, n_factors, N = NA, method = c("PAF", "ML", "ULS"),
   checkmate::assert_count(max_iter, null.ok = TRUE)
   checkmate::assert_choice(init_comm, c("smc", "mac", "unity"), null.ok = TRUE)
   checkmate::assert_number(criterion, null.ok = TRUE, lower = 0, upper = 1)
-  checkmate::assert_choice(criterion_type, c("max_individual", "sums"),
+  checkmate::assert_choice(criterion_type, c("max_individual", "sums", "sum"),
                            null.ok = TRUE)
   checkmate::assert_flag(abs_eigen, null.ok = TRUE)
   checkmate::assert_number(k, null.ok = TRUE)
-  checkmate::assert_flag(kaiser, null.ok = TRUE)
+  checkmate::assert_choice(varimax_type, c("svd", "kaiser"), null.ok = TRUE)
+  checkmate::assert_flag(normalize, null.ok = TRUE)
   checkmate::assert_choice(P_type, c("unnorm", "norm"), null.ok = TRUE)
-  checkmate::assert_number(precision, null.ok = TRUE, lower = 0, upper = 1)
+  checkmate::assert_number(precision, lower = 0, upper = 1)
   checkmate::assert_choice(order_type, c("eigen", "ss_factors"), null.ok = TRUE)
 
   # Check if it is a correlation matrix
@@ -379,20 +385,22 @@ EFA <- function(x, n_factors, N = NA, method = c("PAF", "ML", "ULS"),
   # rotate factor analysis results
   if (rotation == "promax") {
 
-    rot_out <- .PROMAX(fit_out, type = type, kaiser = kaiser, P_type = P_type,
-                      precision = precision, order_type = order_type, k = k)
+    rot_out <- .PROMAX(fit_out, type = type, normalize = normalize, P_type = P_type,
+                      precision = precision, order_type = order_type,
+                      varimax_type = varimax_type, k = k)
 
   } else if (rotation == "varimax") {
 
-    rot_out <- .VARIMAX(fit_out, type = type, kaiser = kaiser,
-                       precision = precision, order_type = order_type)
+    rot_out <- .VARIMAX(fit_out, type = type, normalize = normalize,
+                       precision = precision, varimax_type = varimax_type,
+                       order_type = order_type)
 
   } else if (rotation == "quartimax" || rotation == "equamax" ||
              rotation == "bentlerT" || rotation == "geominT" ||
              rotation == "bifactorT") {
 
     rot_out <- .ROTATE_ORTH(fit_out, type = type, rotation = rotation,
-                           kaiser = kaiser, precision = precision,
+                           normalize = normalize, precision = precision,
                            order_type = order_type, ...)
 
   } else if (rotation == "oblimin" || rotation == "quartimin" ||
@@ -400,7 +408,7 @@ EFA <- function(x, n_factors, N = NA, method = c("PAF", "ML", "ULS"),
              rotation == "geominQ" || rotation == "bifactorQ") {
 
     rot_out <- .ROTATE_OBLQ(fit_out, type = type, rotation = rotation,
-                           kaiser = kaiser, precision = precision,
+                           normalize = normalize, precision = precision,
                            order_type = order_type, k = k, ...)
 
   } else {

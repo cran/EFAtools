@@ -40,14 +40,14 @@ print(EKC(DOSPERT_sub), plot = FALSE)
 
 ## -----------------------------------------------------------------------------
 N_FACTORS(DOSPERT_sub, criteria = c("PARALLEL", "EKC", "SMT"),
-          eigen_type_KGC_PA = c("SMC", "PCA"))
+          eigen_type_other = c("SMC", "PCA"))
 
 ## -----------------------------------------------------------------------------
 N_FACTORS(DOSPERT_sub, method = "ULS")
 
 ## -----------------------------------------------------------------------------
 N_FACTORS(test_models$baseline$cormat, N = 500,
-          method = "ULS", eigen_type_KGC_PA = c("SMC", "PCA"))
+          method = "ULS", eigen_type_other = c("SMC", "PCA"))
 
 ## -----------------------------------------------------------------------------
 EFA(DOSPERT_sub, n_factors = 6)
@@ -77,6 +77,10 @@ COMPARE(
   EFA(DOSPERT_sub, n_factors = 6, rotation = "oblimin", method = "ULS")$rot_loadings,
   x_labels = c("PAF and promax", "ULS and oblimin")
 )
+
+## -----------------------------------------------------------------------------
+EFA_mod <- EFA(DOSPERT_sub, n_factors = 6, rotation = "promax")
+fac_scores <- FACTOR_SCORES(DOSPERT_sub, f = EFA_mod)
 
 ## ----message=FALSE------------------------------------------------------------
 microbenchmark::microbenchmark(
