@@ -17,7 +17,7 @@ library(EFAtools)
 
 ## -----------------------------------------------------------------------------
 # only use a subset to make analyses faster
-DOSPERT_sub <- DOSPERT_raw[1:250,]
+DOSPERT_sub <- DOSPERT_raw[1:500,]
 
 ## -----------------------------------------------------------------------------
 # Bartlett's test of sphericity
@@ -95,6 +95,15 @@ microbenchmark::microbenchmark(
 )
 
 ## -----------------------------------------------------------------------------
+# Average solution across many different EFAs with oblique rotations
+EFA_AV <- EFA_AVERAGE(test_models$baseline$cormat, n_factors = 3, N = 500,
+                      method = c("PAF", "ML", "ULS"), rotation = "oblique",
+                      show_progress = FALSE)
+
+# look at solution
+EFA_AV
+
+## -----------------------------------------------------------------------------
 efa_dospert <- EFA(DOSPERT_sub, n_factors = 6, rotation = "promax")
 efa_dospert
 
@@ -106,6 +115,9 @@ sl_dospert
 OMEGA(sl_dospert, type = "psych")
 
 ## -----------------------------------------------------------------------------
-OMEGA(sl_dospert, factor_corres = c(rep(3, 6), 1, 5, 1, 5, 1, 5, 3, 3, 
-                                    rep(6, 4), rep(4, 6), rep(2, 6)))
+OMEGA(sl_dospert, factor_corres = matrix(c(rep(0, 18), rep(1, 6), rep(0, 30), 
+                                         rep(1, 6), rep(0, 6), 1, 0, 1, 0, 1,
+                                         rep(0, 19), rep(1, 6), rep(0, 31), 1, 0,
+                                         1, 0, 1, rep(0, 30), rep(1, 6), 
+                                         rep(0, 12)), ncol = 6, byrow = FALSE))
 

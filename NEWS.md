@@ -1,3 +1,19 @@
+# EFAtools 0.3.0
+
+## General
+* Added examples for `EFA_AVERAGE()` to readme and the EFAtools vignette
+* Updated examples in readme and vignettes according to the updated `OMEGA` function
+
+## New Functions
+
+* Added function `EFA_AVERAGE()` and respective print and plot methods, to allow running many EFAs across different implementations to obtain an average solution and test the stability of the results.
+
+## Changes to Functions
+
+* `EFA()`: Defaults that were previously set to `NULL` are now mostly set to `NA`. This was necessary for `EFA_AVERAGE()` to work correctly.
+* `PARALLEL()`: Rewrote the generation of random data based eigenvalues to be more stable when SMCs are used.
+* `OMEGA()`: Changed expected input for argument `factor_corres` from vector to matrix. Can now be a logical matrix or a numeric matrix with 0's and 1's of the same dimensions as the matrix of group factor loadings. This is more flexible and allows for cross-loadings.
+
 # EFAtools 0.2.0
 
 ## General
@@ -15,9 +31,9 @@ methods.
 
 * `CD()`: Added check for whether entered data is a tibble, and if so, convert to vanilla data.frame to avoid breaking the procedure.
 * `EFA()`: 
-    * Updated the EFAtools type in PAF and Pomax.
+    * Updated the EFAtools type in PAF and Promax.
     * Added p value for chi square value in output (calculated for ML and ULS fitting methods).
-    * Updated the SPSS varimax implementation to fit SPSS results more closesly.
+    * Updated the SPSS varimax implementation to fit SPSS results more closely.
     * Created an argument "varimax_type" that is set according to the specified type, but that can also be specified individually. With type R psych and EFAtools, the stats::varimax is called by default (`varimax_type = "svd"`), with type SPSS, the reproduced SPSS varimax implementation is used (`varimax_type = "kaiser"`).
     * Renamed the `kaiser` argument (controls if a Kaiser normalization is done or not) into `normalize` to avoid confusion with the `varimax_type` argument specifications.
 * `ML()`: Changed default start method to "psych".
