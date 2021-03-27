@@ -1,7 +1,7 @@
 Package: EFAtools
 Title: Fast and Flexible Implementations of Exploratory Factor Analysis
         Tools
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: 
     c(person(given = "Markus",
              family = "Steiner",
@@ -48,7 +48,7 @@ LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat, knitr, rmarkdown, microbenchmark
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2020-11-04 17:24:36 UTC; msteiner
+Packaged: 2021-03-25 07:37:21 UTC; msteiner
 Author: Markus Steiner [aut, cre],
   Silvia Grieder [aut],
   William Revelle [ctb],
@@ -60,4 +60,4 @@ Author: Markus Steiner [aut, cre],
   David Navarro-Gonzalez [ctb]
 Maintainer: Markus Steiner <markus.d.steiner@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-11-04 18:00:02 UTC
+Date/Publication: 2021-03-27 08:40:42 UTC

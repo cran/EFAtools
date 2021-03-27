@@ -35,12 +35,12 @@ psych_paf <- psych::fa(DOSPERT$cormat, nfactors = 10, n.obs = DOSPERT$N,
 COMPARE(EFA_psych_paf$unrot_loadings, psych_paf$loadings)
 
 # Compare loadings from SPSS and EFAtools::EFA with type = "SPSS"
-COMPARE(EFA_SPSS_paf$unrot_loadings, SPSS$DOSPERT$paf_load)
+COMPARE(EFA_SPSS_paf$unrot_loadings, SPSS_27$DOSPERT$paf_load)
 
 
 ## -----------------------------------------------------------------------------
 # Compare loadings from psych::fa and SPSS
-COMPARE(psych_paf$loadings, SPSS$DOSPERT$paf_load)
+COMPARE(psych_paf$loadings, SPSS_27$DOSPERT$paf_load)
 
 ## -----------------------------------------------------------------------------
 ## Fit the models
@@ -61,12 +61,12 @@ psych_var <- psych::fa(DOSPERT$cormat, nfactors = 10, n.obs = DOSPERT$N,
 COMPARE(EFA_psych_var$rot_loadings, psych_var$loadings)
 
 # Compare loadings from SPSS and EFAtools::EFA with type = "SPSS"
-COMPARE(EFA_SPSS_var$rot_loadings, SPSS$DOSPERT$var_load)
+COMPARE(EFA_SPSS_var$rot_loadings, SPSS_27$DOSPERT$var_load)
 
 ## Compare original results (just to see the difference)
 
 # Compare loadings from psych::fa and SPSS
-COMPARE(psych_var$loadings, SPSS$DOSPERT$var_load)
+COMPARE(psych_var$loadings, SPSS_27$DOSPERT$var_load)
 
 
 ## -----------------------------------------------------------------------------
@@ -88,11 +88,11 @@ psych_pro <- psych::fa(DOSPERT$cormat, nfactors = 10, n.obs = DOSPERT$N,
 COMPARE(EFA_psych_pro$rot_loadings, psych_pro$loadings)
 
 # Compare loadings from SPSS and EFAtools::EFA with type = "SPSS"
-COMPARE(EFA_SPSS_pro$rot_loadings, SPSS$DOSPERT$pro_load)
+COMPARE(EFA_SPSS_pro$rot_loadings, SPSS_27$DOSPERT$pro_load)
 
 ## Compare original results (just to see the difference)
 
 # Compare loadings from psych::fa and SPSS
-COMPARE(psych_pro$loadings, SPSS$DOSPERT$pro_load)
+COMPARE(psych_pro$loadings, SPSS_27$DOSPERT$pro_load)
 
 

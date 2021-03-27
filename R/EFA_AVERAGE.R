@@ -292,31 +292,6 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
                         cor_method = c("pearson", "spearman", "kendall"),
                         show_progress = TRUE) {
 
-  # x= IDS2_R
-  # n_factors = 6
-  # N = 1991
-  # method = "PAF"
-  # rotation = "promax"
-  # type = "none"
-  # averaging = "mean"
-  # trim = 0
-  # salience_threshold = .3
-  # max_iter = 1e4
-  # init_comm = c("smc", "mac", "unity")
-  # criterion = c(1e-3, 1e-6)
-  # criterion_type = c("sum", "max_individual")
-  # abs_eigen = c(TRUE, FALSE)
-  # varimax_type = c("svd", "kaiser")
-  # normalize = TRUE
-  # k_promax = 2:4
-  # k_simplimax = ncol(x)
-  # P_type = c("norm", "unnorm")
-  # precision = 1e-5
-  # start_method = c("psych", "factanal")
-  # use = "pairwise.complete.obs"
-  # cor_method = "pearson"
-  # show_progress = TRUE
-
   # Perform argument checks
   if(!inherits(x, c("matrix", "data.frame"))){
 
@@ -397,7 +372,7 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
 
   # Check if correlation matrix is positive definite, if it is not,
   # smooth the matrix (cor.smooth throws a warning)
-  if (any(eigen(R, symmetric = TRUE, only.values = TRUE)$values <= 0)) {
+  if (any(eigen(R, symmetric = TRUE, only.values = TRUE)$values <= .Machine$double.eps^.6)) {
 
     R <- psych::cor.smooth(R)
 
@@ -438,7 +413,7 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
                                            rotation = rotation, k_promax = 4,
                                            normalize = TRUE, P_type = "norm",
                                            precision = 1e-5,
-                                           varimax_type = "svd",
+                                           varimax_type = "kaiser",
                                            k_simplimax = k_simplimax)
     }
 
@@ -486,7 +461,7 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
                                              rotation = rotation, k_promax = 4,
                                              normalize = TRUE, P_type = "norm",
                                              precision = 1e-5,
-                                             varimax_type = "svd",
+                                             varimax_type = "kaiser",
                                              k_simplimax = k_simplimax)
       }
 
@@ -534,7 +509,7 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
                                                rotation = rotation, k_promax = 4,
                                                normalize = TRUE, P_type = "norm",
                                                precision = 1e-5,
-                                               varimax_type = "svd",
+                                               varimax_type = "kaiser",
                                                k_simplimax = k_simplimax)
         }
 
@@ -592,8 +567,6 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
 
   }
 
-  n_cores <- future::nbrOfWorkers()
-
   if (isTRUE(show_progress)) {
     progressr::handlers("progress")
   } else {
@@ -633,7 +606,8 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
     criterion_types = arg_grid$criterion_type, abs_eigens = arg_grid$abs_eigen,
     varimax_types = arg_grid$varimax_type, k_ps = arg_grid$k_promax,
     k_ss = arg_grid$k_simplimax, normalizes = arg_grid$normalize,
-    P_types = arg_grid$P_type, start_methods = arg_grid$start_method)
+    P_types = arg_grid$P_type, start_methods = arg_grid$start_method,
+    future.seed = TRUE)
 
     if (n_efa %% 10 != 0){
       efa_progress_bar(message = "Done Running EFAs ")
@@ -677,10 +651,11 @@ EFA_AVERAGE <- function(x, n_factors, N = NA, method = "PAF", rotation = "promax
       .show_av_progress("\U0001f3c3", "Averaging data...")
     }
     av_list <- suppressWarnings(
-      .average_values(re_list$vars_accounted, re_list$L, re_list$L_corres, ext_list$h2, re_list$phi,
-                      ext_list$extract_phi, averaging, trim,
-                      ext_list$for_grid[, c("chisq", "p_chi", "caf", "cfi",
-                                            "rmsea", "aic", "bic")], df, colnames(R)))
+      .average_values(re_list$vars_accounted, re_list$L, re_list$L_corres,
+                      ext_list$h2, re_list$phi, ext_list$extract_phi, averaging,
+                      trim, ext_list$for_grid[, c("chisq", "p_chi", "caf", "cfi",
+                                                  "rmsea", "aic", "bic")], df,
+                      colnames(R)))
 
   }
 
