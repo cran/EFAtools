@@ -1,4 +1,4 @@
-d3579b33ff49231d3810a64c170223e6 *DESCRIPTION
+1140e1a7768554cd13db534a7af75dff *DESCRIPTION
 b7cfb71da313743c15b0598df3fb5b3c *NAMESPACE
 798c689da5bf8177d61f4c0c59aba193 *NEWS.md
 7c66f493a7fd149e492789c396e31b8c *R/BARTLETT.R
@@ -90,10 +90,10 @@ fef646286a5dc9c4be13538b6e7bf1e5 *data/WJIV_ages_9_13.RData
 c5a8baba7088440438d82a65267e88af *inst/CITATION
 c7db940e0b90b10c66d05b2fe97cfab1 *inst/doc/EFAtools.R
 f0ee8e3ef01864926ca92a5ac4a2bd1a *inst/doc/EFAtools.Rmd
-b3bd86f042c14c822d705c6b6a2a4b6f *inst/doc/EFAtools.html
+56063a32e4f9ad41341bd0bb1faad0bb *inst/doc/EFAtools.html
 996e9c9186dc311ff37c5ce3cafaf2ad *inst/doc/Replicate_SPSS_psych.R
 0547c3f191eb4a43a0542d3b3b6352f1 *inst/doc/Replicate_SPSS_psych.Rmd
-5378f96d89a76f99e578dbe49f64e091 *inst/doc/Replicate_SPSS_psych.html
+c72392ec70954010a304bc8c751a37f5 *inst/doc/Replicate_SPSS_psych.html
 6e32d1789a6e9e138b88ebb6630a6203 *man/BARTLETT.Rd
 507381e28ec4421272692f3464a30549 *man/CD.Rd
 9f4e2d043694954762dac32156df87b5 *man/COMPARE.Rd
@@ -174,7 +174,7 @@ cdd8fab98641428291c197aa86bf5d09 *src/uls_helper.cpp
 70b7c3f7ab216c20b06162c5e58f1a78 *tests/testthat.R
 4bb9fed7ff7713d85d214743b2c37860 *tests/testthat/test-BARTLETT.R
 6bf9a64e2c56a935858bd71dd7a6c001 *tests/testthat/test-CD.R
-0c1d2be187fbc254de4c9614b8f84b2b *tests/testthat/test-COMPARE.R
+bdafd71da1902d47608951d4abe3e3b4 *tests/testthat/test-COMPARE.R
 af67de92803250b52b1802051c091c8f *tests/testthat/test-EFA.R
 5f1d648abb826e926d243bc83f9e31cf *tests/testthat/test-EFA_AVERAGE.R
 11ff1998e9c6b1505143bc6540763ff0 *tests/testthat/test-EKC.R
