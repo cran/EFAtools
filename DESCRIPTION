@@ -1,7 +1,7 @@
 Package: EFAtools
 Title: Fast and Flexible Implementations of Exploratory Factor Analysis
         Tools
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: 
     c(person(given = "Markus",
              family = "Steiner",
@@ -39,7 +39,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/mdsteiner/EFAtools
 BugReports: https://github.com/mdsteiner/EFAtools/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Imports: lavaan, psych, crayon, stringr, stats, ggplot2, tibble,
         magrittr, dplyr, cli, Rcpp, viridisLite, graphics,
         future.apply, future, GPArotation, checkmate, tidyr, progressr,
@@ -48,7 +48,7 @@ LinkingTo: Rcpp, RcppArmadillo
 Suggests: testthat, knitr, rmarkdown, microbenchmark
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2022-04-24 11:53:57 UTC; ma1159938
+Packaged: 2022-09-27 06:31:00 UTC; ma1159938
 Author: Markus Steiner [aut, cre],
   Silvia Grieder [aut],
   William Revelle [ctb],
@@ -60,4 +60,4 @@ Author: Markus Steiner [aut, cre],
   David Navarro-Gonzalez [ctb]
 Maintainer: Markus Steiner <markus.d.steiner@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-04-24 14:40:02 UTC
+Date/Publication: 2022-09-27 07:50:16 UTC
