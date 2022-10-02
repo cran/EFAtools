@@ -1,6 +1,6 @@
-5514a8bf0b090aa543f320a5c230b604 *DESCRIPTION
+fa71b9b8b332f81a2031b498afcf8861 *DESCRIPTION
 b7cfb71da313743c15b0598df3fb5b3c *NAMESPACE
-ee37f32ea5f5a81361c38a03bee2f1d0 *NEWS.md
+3bd809391bc78e3e97ecec2a997cd2e7 *NEWS.md
 7c66f493a7fd149e492789c396e31b8c *R/BARTLETT.R
 772b74c86fba04904b2b3bd392fadb98 *R/CD.R
 1dfda8a154c9172a7dd537910448427b *R/COMPARE.R
@@ -41,7 +41,7 @@ c927dd9f00fc4d68b9dc5dea44172963 *R/WJIV_ages_3_5_doc.R
 8c66fae8222874494fa72c08fda56899 *R/WJIV_ages_40_90_doc.R
 17c71d8ecd2d9942543fdd2dd889b863 *R/WJIV_ages_6_8_doc.R
 a080762f0202535d4d6c34a43302468f *R/WJIV_ages_9_13_doc.R
-e577f91216c6b4bcca8de4d091b4ca41 *R/helper.R
+a1a3a2c7199ff30bb5a7b7e568c6eafd *R/helper.R
 16976eeedc51a597a9c166cbb1b32fe4 *R/plot.CD.R
 64850709ac160a960195f9c034078546 *R/plot.EFA_AVERAGE.R
 0bd43cb9ed0dc2318ca170ce67b05dbe *R/plot.EKC.R
@@ -90,10 +90,10 @@ fef646286a5dc9c4be13538b6e7bf1e5 *data/WJIV_ages_9_13.RData
 c5a8baba7088440438d82a65267e88af *inst/CITATION
 c7db940e0b90b10c66d05b2fe97cfab1 *inst/doc/EFAtools.R
 f0ee8e3ef01864926ca92a5ac4a2bd1a *inst/doc/EFAtools.Rmd
-db64d723d6e8e5778a7dfc8099e48d26 *inst/doc/EFAtools.html
+aa68c285d832fee48e0af85c5b42e175 *inst/doc/EFAtools.html
 996e9c9186dc311ff37c5ce3cafaf2ad *inst/doc/Replicate_SPSS_psych.R
 0547c3f191eb4a43a0542d3b3b6352f1 *inst/doc/Replicate_SPSS_psych.Rmd
-a5a866c93cf956a4762e12b54ad05486 *inst/doc/Replicate_SPSS_psych.html
+a54f05cd9e6f83cfe373f5054d35d6b0 *inst/doc/Replicate_SPSS_psych.html
 6e32d1789a6e9e138b88ebb6630a6203 *man/BARTLETT.Rd
 507381e28ec4421272692f3464a30549 *man/CD.Rd
 9f4e2d043694954762dac32156df87b5 *man/COMPARE.Rd
