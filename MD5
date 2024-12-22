@@ -1,4 +1,4 @@
-a61b7e6d60b9b87c9eff402479a950e3 *DESCRIPTION
+1d225f2c8d589dfc108ffd5d72d04a8b *DESCRIPTION
 b7cfb71da313743c15b0598df3fb5b3c *NAMESPACE
 f5dc8a7cc774643d4a298361af572ce7 *NEWS.md
 7c66f493a7fd149e492789c396e31b8c *R/BARTLETT.R
@@ -18,8 +18,8 @@ ace211e8388205bd7f930a19268daa32 *R/KGC.R
 4d34269840b2c9369947c124c48f3b01 *R/KMO.R
 a402027463d9782f37e7690753acc806 *R/ML.R
 64f1e8e502efd5d5c48d1376425b03bc *R/N_FACTORS.R
-9c8b8cecffdb2f00a815146afdca9d56 *R/OMEGA.R
-1e9134e4e4a2b6948b175c2d3e232d57 *R/OMEGA_helper.R
+fd8410f562cbfdce88c68d5e20e384a8 *R/OMEGA.R
+60a6b0713a480dffcf42ef0822096fab *R/OMEGA_helper.R
 33d873ceb6689b87bd80cb19d1b45414 *R/PAF.R
 c2e8a62fe79922f69efbb1195d74c6c1 *R/PARALLEL.R
 5283ddcdf4006d331831d97dc44471a1 *R/PROMAX.R
@@ -69,8 +69,8 @@ e3233541f765349705c7d44eeb3acd18 *R/print.N_FACTORS.R
 fbccb3c4d837f946daf2d99886ab2290 *R/print.SMT.R
 f1cd1d7325e03612907fef5cc3771221 *R/test_models_doc.R
 3ae23ff1c90581c3e5651878b3705fff *R/utils-pipe.R
-0e066ed3737eea1badb4d73b4b2ace84 *README.md
-371232ae256b0a320f021307e7b45f9b *build/vignette.rds
+c89a1a7e0654ddc6220d710af9d44053 *README.md
+141933e3f32b5bc8cb84ff57b50de04a *build/vignette.rds
 44be8fc068c2efe925b41cf7c3cdc23a *data/DOSPERT.RData
 89c05757e8ed3f64cec73a539274e8d9 *data/DOSPERT_raw.RData
 7c2bfcdd582c4ae49041eb9a4d976779 *data/GRiPS_raw.RData
@@ -87,13 +87,13 @@ f1cd1d7325e03612907fef5cc3771221 *R/test_models_doc.R
 fef646286a5dc9c4be13538b6e7bf1e5 *data/WJIV_ages_9_13.RData
 5697cfa8b517d3c94702488a9f7a27ef *data/population_models.RData
 0e40d2898bd5168d0b9cbcab671420ec *data/test_models.RData
-c5a8baba7088440438d82a65267e88af *inst/CITATION
-c7db940e0b90b10c66d05b2fe97cfab1 *inst/doc/EFAtools.R
+fdad1655b9c0c09bb104013fcd0d1dce *inst/CITATION
+57a6b690e9fc6c251078bd359702df2e *inst/doc/EFAtools.R
 f0ee8e3ef01864926ca92a5ac4a2bd1a *inst/doc/EFAtools.Rmd
-0f4027184845954b6c758009d0992b72 *inst/doc/EFAtools.html
-996e9c9186dc311ff37c5ce3cafaf2ad *inst/doc/Replicate_SPSS_psych.R
+af9430af28ede5747a27cfecaca3c35d *inst/doc/EFAtools.html
+8c56c2edf38d6c7c51c244d4132f39aa *inst/doc/Replicate_SPSS_psych.R
 0547c3f191eb4a43a0542d3b3b6352f1 *inst/doc/Replicate_SPSS_psych.Rmd
-e7fe94df80372731e67f7e889292aaef *inst/doc/Replicate_SPSS_psych.html
+786f89da925dc896d69500fba3aebdcd *inst/doc/Replicate_SPSS_psych.html
 6e32d1789a6e9e138b88ebb6630a6203 *man/BARTLETT.Rd
 507381e28ec4421272692f3464a30549 *man/CD.Rd
 9f4e2d043694954762dac32156df87b5 *man/COMPARE.Rd
@@ -110,7 +110,7 @@ cda06e35a74c80b105d5e62becf1d033 *man/HULL.Rd
 328b9af6b2d6a7907185b5b1da74b0aa *man/KGC.Rd
 0b85b3c5a2085409406babc92636a0bc *man/KMO.Rd
 1390cd4126c09ef00c7154ac09d21de6 *man/N_FACTORS.Rd
-1121c869266630e97d8d2031489cbce6 *man/OMEGA.Rd
+bfcc3b2c83b7521bbf6f581ec023cd55 *man/OMEGA.Rd
 532d63cceb1b5d9261d64bd854857c55 *man/PARALLEL.Rd
 86b2087cd893ae97078ce09538d33b99 *man/RiskDimensions.Rd
 b056352a78d8a8b915f3c8466ade6a5f *man/SCREE.Rd
@@ -134,7 +134,7 @@ cec1400046fb3787c07d94398f03af89 *man/dot-factor_corres.Rd
 6a0f01f332a771d00c2bde8f39654550 *man/figures/README-unnamed-chunk-5-1.png
 d8cff91ddd22c41e755dc0cbb6539eb5 *man/figures/README-unnamed-chunk-5-2.png
 63e333b23e19358b5a9ddfea9dd98f03 *man/figures/README-unnamed-chunk-5-3.png
-701e2adf6db4ddff561e497669e0aeca *man/figures/README-unnamed-chunk-5-4.png
+6f24a2bb2c014a1fcc9c8d1c866adc2c *man/figures/README-unnamed-chunk-5-4.png
 9ac2b8a22b94b34e6716086903b09479 *man/figures/README-unnamed-chunk-5-5.png
 de570f4bd2659c8f2cd27a85c5f92d4f *man/pipe.Rd
 baa26bb664615edd99dfd4511c28fa8e *man/plot.CD.Rd
@@ -163,8 +163,8 @@ fd6abf255c1b0c49be6af052e582504a *man/print.PARALLEL.Rd
 c105e59657410a9ef27aacc4fe7d0a1b *man/print.SLLOADINGS.Rd
 74fb98f4af7046e3d0cdfdaee865daea *man/print.SMT.Rd
 30f3d3c44a2f5f290125f11b7c5d47b4 *man/test_models.Rd
-61059660eb073d93e00e8ee054237071 *src/Makevars
-61059660eb073d93e00e8ee054237071 *src/Makevars.win
+d2773de8a526eba651ace8a09e431abb *src/Makevars
+d2773de8a526eba651ace8a09e431abb *src/Makevars.win
 3e86d06e8979d50ffe63ff10a40924be *src/RcppExports.cpp
 0195e3b55978c215402034f38bb20c34 *src/factor_corres.cpp
 a99283d14eb3db2cc3691941665e2a7c *src/ml_helper.cpp
