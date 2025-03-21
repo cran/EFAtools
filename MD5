@@ -1,6 +1,6 @@
-1d225f2c8d589dfc108ffd5d72d04a8b *DESCRIPTION
+9540d547385fdb4446d4946328d4c051 *DESCRIPTION
 b7cfb71da313743c15b0598df3fb5b3c *NAMESPACE
-f5dc8a7cc774643d4a298361af572ce7 *NEWS.md
+ed78c790fcbb81205ff330a291c45434 *NEWS.md
 7c66f493a7fd149e492789c396e31b8c *R/BARTLETT.R
 772b74c86fba04904b2b3bd392fadb98 *R/CD.R
 1dfda8a154c9172a7dd537910448427b *R/COMPARE.R
@@ -89,11 +89,11 @@ fef646286a5dc9c4be13538b6e7bf1e5 *data/WJIV_ages_9_13.RData
 0e40d2898bd5168d0b9cbcab671420ec *data/test_models.RData
 fdad1655b9c0c09bb104013fcd0d1dce *inst/CITATION
 57a6b690e9fc6c251078bd359702df2e *inst/doc/EFAtools.R
-f0ee8e3ef01864926ca92a5ac4a2bd1a *inst/doc/EFAtools.Rmd
-af9430af28ede5747a27cfecaca3c35d *inst/doc/EFAtools.html
+086dbda9ec76604c027ba0fd33ba9e13 *inst/doc/EFAtools.Rmd
+4050045bba58957274cf5f920b753e75 *inst/doc/EFAtools.html
 8c56c2edf38d6c7c51c244d4132f39aa *inst/doc/Replicate_SPSS_psych.R
 0547c3f191eb4a43a0542d3b3b6352f1 *inst/doc/Replicate_SPSS_psych.Rmd
-786f89da925dc896d69500fba3aebdcd *inst/doc/Replicate_SPSS_psych.html
+a6e519377a9288e2c3a3be608887dece *inst/doc/Replicate_SPSS_psych.html
 6e32d1789a6e9e138b88ebb6630a6203 *man/BARTLETT.Rd
 507381e28ec4421272692f3464a30549 *man/CD.Rd
 9f4e2d043694954762dac32156df87b5 *man/COMPARE.Rd
@@ -197,6 +197,6 @@ abd93ee4dd2cbb8e26f2d58512035d3f *tests/testthat/test-ROTATE_OBLQ.R
 3c30b2605a461787c444a53683e04aa2 *tests/testthat/test-SMT.R
 05853630fe1392dc0cb9c18da54bd928 *tests/testthat/test-ULS.R
 8c6fc8eae59d1854bb83b3473c92e21c *tests/testthat/test-VARIMAX.R
-02f7dab57ea4c0ac6d676129326fbbf5 *tests/testthat/test-helper.R
-f0ee8e3ef01864926ca92a5ac4a2bd1a *vignettes/EFAtools.Rmd
+463bd86ce68c285ac7a980a4d571fc52 *tests/testthat/test-helper.R
+086dbda9ec76604c027ba0fd33ba9e13 *vignettes/EFAtools.Rmd
 0547c3f191eb4a43a0542d3b3b6352f1 *vignettes/Replicate_SPSS_psych.Rmd
